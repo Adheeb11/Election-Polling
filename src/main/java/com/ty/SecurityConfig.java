@@ -19,17 +19,16 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
+    public UserDetailsService userDetailsService() {
 
-        // ---- ADMIN ----
+        PasswordEncoder encoder = passwordEncoder();
+
         var admin = User.withUsername("admin")
                 .password(encoder.encode("admin123"))
                 .roles("ADMIN")
                 .build();
 
-        // ---- NORMAL USERS ----
         var user1 = User.withUsername("user1")
                 .password(encoder.encode("user123"))
                 .roles("USER")
@@ -55,23 +54,29 @@ public class SecurityConfig {
                 .roles("USER")
                 .build();
 
-        return new InMemoryUserDetailsManager(admin, user1, user2, user3, user4, user5);
+        return new InMemoryUserDetailsManager(
+                admin, user1, user2, user3, user4, user5
+        );
     }
 
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/user/**").hasRole("USER")
-                .anyRequest().authenticated()
-        )
+        http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login", "/**/*.css").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/user/**").hasRole("USER")
+                        .anyRequest().authenticated()
+                )
+
                 .formLogin(form -> form
                         .loginPage("/login")
                         .defaultSuccessUrl("/default", true)
+                        .permitAll()
                 )
+
                 .logout(Customizer.withDefaults());
 
         return http.build();
