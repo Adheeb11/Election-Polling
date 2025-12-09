@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cast Your Vote</title>
+    <link rel="stylesheet" th:href="@{/vote.css}">
+</head>
+<body>
+<div class="vote-wrapper">
+    <div class="vote-card">
+        <div class="header">
+            <h2>Cast Your Vote</h2>
+            <form th:action="@{/logout}" method="post" class="logout-form">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+
+        <div th:if="${hasVoted}">
+            <p class="info-text warning">
+                You have already cast your vote. You cannot vote again.
+            </p>
+            <p class="info-text">
+                You voted for:
+                <span class="voted-name"
+                      th:text="${votedCandidate != null ? votedCandidate.name : 'Unknown'}"></span>
+                <span th:if="${votedCandidate != null}">
+                    (<span th:text="${votedCandidate.party}"></span>)
+                </span>
+            </p>
+        </div>
+
+        <div th:if="${!hasVoted}">
+            <p class="info-text">Select a candidate and submit your vote:</p>
+            <form th:action="@{/user/vote}" method="post" class="vote-form">
+                <div th:each="c : ${candidates}" class="candidate-row">
+                    <label>
+                        <input type="radio" name="candidateId" th:value="${c.id}" required/>
+                        <span class="candidate-name" th:text="${c.name}"></span>
+                        <span class="candidate-party"
+                              th:text="'(' + ${c.party} + ')'"></span>
+                    </label>
+                </div>
+                <button type="submit" class="submit-btn">Submit Vote</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/admin-dashboard.css}">
+</head>
+<body>
+<div class="admin-wrapper">
+    <div class="admin-card">
+        <div class="header">
+            <h2>Admin Dashboard - Election Results</h2>
+            <form th:action="@{/logout}" method="post" class="logout-form">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+
+        <p class="total-votes">
+            Total Votes: <span th:text="${totalVotes}">0</span>
+        </p>
+
+        <table class="results-table">
+            <thead>
+            <tr>
+                <th>Candidate</th>
+                <th>Party</th>
+                <th>Votes</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="c : ${candidates}">
+                <td th:text="${c.name}"></td>
+                <td th:text="${c.party}"></td>
+                <td th:text="${c.voteCount}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="leader-section" th:if="${leader != null}">
+            <h3>Leading Candidate</h3>
+            <p>
+                <span class="leader-name" th:text="${leader.name}"></span>
+                (<span th:text="${leader.party}"></span>)
+                with <span th:text="${leader.voteCount}"></span> votes
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

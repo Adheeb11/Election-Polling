@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Election Login</title>
+    <link rel="stylesheet" th:href="@{/login.css}">
+</head>
+<body>
+<div class="login-wrapper">
+    <div class="login-card">
+        <h1>Election Polling System</h1>
+        <h2>Login</h2>
+
+        <form th:action="@{/login}" method="post" class="login-form">
+            <label>Username</label>
+            <input type="text" name="username" placeholder="Enter username" required/>
+
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter password" required/>
+
+            <button type="submit">Login</button>
+        </form>
+
+      
+    </div>
+</div>
+</body>
+</html>
